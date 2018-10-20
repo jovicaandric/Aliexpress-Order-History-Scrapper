@@ -1,0 +1,44 @@
+<mat-toolbar color="primary" style="padding:20px;margin:0;">
+  <span style="color:White;">Aliexpress Transaction History Scrapper</span>
+</mat-toolbar>
+<div class="content">
+<mat-form-field style="width:calc(100% - 170px);">
+  <input matInput placeholder="Aliexpress Order Url" [(ngModel)]="url" name="url" >
+
+</mat-form-field>
+  <button mat-raised-button color="warn" style="width:150px; margin-left:20px;" (click)="getOrders()">Get Orders</button>
+  <mat-progress-bar mode="indeterminate" style="width:100%;" *ngIf="loading"></mat-progress-bar>
+  <div *ngIf="orders.length>0">
+  <mat-form-field style="width:30%;">
+    <input matInput placeholder="Country Name Filter" [(ngModel)]="countryFilter" name="filter" >
+  </mat-form-field>
+  <mat-form-field style="width:200px;margin-left:50px;">
+    <input matInput [matDatepicker]="filterDate" [(ngModel)]="dateFilter" placeholder="Filter Order Date" disabled>
+    <mat-datepicker-toggle matSuffix [for]="filterDate"></mat-datepicker-toggle>
+    <mat-datepicker #filterDate disabled="false"></mat-datepicker>
+  </mat-form-field>
+  <button *ngIf="countryFilter.length>0 || dateFilter" mat-raised-button (click)="clearFilters()" style="margin-left:50px;">Clear Filters</button>
+</div>
+  <table *ngIf="orders.length>0" class='uk-table uk-table-striped uk-table-small' style="width:100%;MARGIN:20px auto;">
+    <thead>
+      <th>Country</th>
+      <th>Total Orders</th>
+      <th>Total Quantity</th>
+      <th>Quantity</th>
+      <th>Order Date</th>
+    </thead>
+    <tbody *ngFor="let o of orders | filterOrders:countryFilter | dateFilter:dateFilter">
+      <tr  *ngIf="o.order.length > 0">
+        <td >{{o.countryName}}</td>
+        <td >{{o.order.length}}</td>
+        <td >{{calculateQuantity(o)}}</td>
+        <td style="padding-right:0;">
+          <span *ngFor="let r of o.order" style="display:block;border-bottom:1px solid gray;">{{r.quantity}}</span>
+        </td>
+        <td style="padding-left:0;">
+          <span *ngFor="let r of o.order" style="display:block;border-bottom:1px solid gray;">{{r.date | date:'medium'}}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
