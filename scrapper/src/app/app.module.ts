@@ -14,7 +14,9 @@ import {
   MatTableModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatIconModule,
+  MatChipsModule
 } from '@angular/material';
 import { FilterOrdersPipe } from './pipes/filter-orders.pipe';
 import { DateFilterPipe } from './pipes/date-filter.pipe'
@@ -37,7 +39,9 @@ import { DateFilterPipe } from './pipes/date-filter.pipe'
     MatTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatIconModule,
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -13,21 +13,24 @@
     <input matInput placeholder="Country Name Filter" [(ngModel)]="countryFilter" name="filter" >
   </mat-form-field>
   <mat-form-field style="width:200px;margin-left:50px;">
-    <input matInput [matDatepicker]="filterDate" [(ngModel)]="dateFilter" placeholder="Filter Order Date" disabled>
+    <input matInput [matDatepicker]="filterDate" [(ngModel)]="dateFilterView" (ngModelChange)="changeDate()" placeholder="Filter Order Date" disabled>
     <mat-datepicker-toggle matSuffix [for]="filterDate"></mat-datepicker-toggle>
     <mat-datepicker #filterDate disabled="false"></mat-datepicker>
   </mat-form-field>
   <button *ngIf="countryFilter.length>0 || dateFilter" mat-raised-button (click)="clearFilters()" style="margin-left:50px;">Clear Filters</button>
+  <mat-chip-list >
+    <mat-chip *ngFor="let filter of dateFilters; let i = index" style="cursor:pointer;" (click)='filterPredefinedDate(i,filter.value)' [color]="i==chosenPredefinedFilter?'primary':'null'" selected="true" >{{filter.name}}</mat-chip>
+  </mat-chip-list>
 </div>
-  <table *ngIf="orders.length>0" class='uk-table uk-table-striped uk-table-small' style="width:100%;MARGIN:20px auto;">
+  <table *ngIf="orders.length>0" class='uk-table uk-table-striped uk-table-small uk-table-responsive' style="width:100%;MARGIN:20px auto;">
     <thead>
       <th>Country</th>
-      <th>Total Orders</th>
-      <th>Total Quantity</th>
+      <th style="cursor:pointer;" (click)="sortByTotalOrders()">Total Orders <span *ngIf="currentSort=='orders' && !ordersReverse" uk-icon="triangle-down"></span><span *ngIf="currentSort=='orders' && ordersReverse" uk-icon="triangle-up"></span></th>
+      <th style="cursor:pointer;" (click)="sortByTotalQuantity()">Total Quantity <span *ngIf="currentSort=='quantity' && !quantityReverse" uk-icon="triangle-down"></span><span *ngIf="currentSort=='quantity' && quantityReverse" uk-icon="triangle-up"></span></th>
       <th>Quantity</th>
       <th>Order Date</th>
     </thead>
-    <tbody *ngFor="let o of orders | filterOrders:countryFilter | dateFilter:dateFilter">
+    <tbody *ngFor="let o of orders | filterOrders:countryFilter | dateFilter:dateFilter:dateFilterType;let j = index">
       <tr  *ngIf="o.order.length > 0">
         <td >{{o.countryName}}</td>
         <td >{{o.order.length}}</td>

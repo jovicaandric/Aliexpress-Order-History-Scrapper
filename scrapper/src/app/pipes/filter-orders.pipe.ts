@@ -1,4 +1,4 @@
-import { Order } from './../models/Order';
+
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
